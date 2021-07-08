@@ -1,8 +1,7 @@
-#from oracle import *
-#from datetime import datetime, date, timedelta
-#import matplotlib.pyplot as plt
-
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler
+from oracle import *
+from datetime import datetime, date, timedelta
+import matplotlib.pyplot as plt
 import functions
 
 #permisions =[215323461,818780128,-368194966,705268518,1008267781,746014353,-490653384,-499451163,1020918383,1334109159,1166641089]

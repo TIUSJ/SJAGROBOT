@@ -3,9 +3,8 @@ from oracle import *
 from datetime import datetime, date, timedelta
 import matplotlib.pyplot as plt
 
-permisions =[215323461,818780128,-368194966,705268518,1008267781,746014353,-490653384,-499451163,1020918383, 1334109159]
-permisionsCOI =[215323461,818780128,-368194966,705268518,-302990246,1008267781,746014353,-490653384, -499451163,1020918383, 1020918383, 1334109159]
-
+permisions =[215323461,818780128,-368194966,705268518,1008267781,746014353,-490653384,-499451163,1020918383,1334109159,1166641089]
+permisionsCOI =[215323461,818780128,-368194966,705268518,-302990246,1008267781,746014353,-490653384, -499451163,1020918383, 1020918383, 1334109159,1166641089]
 
 def relatorioEntradaDia(bot, update):
     chat_id = update.message.chat_id
@@ -523,88 +522,3 @@ def consultaSaldo(bot, update):
     else:
         bot.send_message(chat_id=chat_id,
                          text='Olá ! Desculpe mas você não tem permisao para acessar o bot :( Favor entrar em contato com o TI para o acesso')
-
-
-def main():
-    #updater = Updater('878172789:AAFgF98c8ENq1e17PvfRB_no5uI4dUyv8_I', use_context=False)
-    updater = Updater('1143523201:AAGfUzLGrx8se3g97cMLo-k-eBGEFpLORGE')
-
-    dp = updater.dispatcher
-
-    dp.add_handler(
-        CommandHandler('relatorio', relatorioEntradaDia)
-
-    )
-
-    dp.add_handler(
-        CommandHandler('relatoriodiaanterior', relatorioEntradaDiaAnterior)
-
-    )
-
-
-    dp.add_handler(
-        CommandHandler('relatoriogeral', relatorioGeralDiaAnterior)
-
-    )
-
-    dp.add_handler(
-        CommandHandler('relatoriodensidade', relatorioEntradaDensidade)
-
-    )
-    dp.add_handler(
-        CommandHandler('relatorioprecipitacao', relatorioGeralDiaAnteriorPress)
-
-    )
-    dp.add_handler(
-        CommandHandler('boletim', relatorioBoletim)
-
-    )
-    dp.add_handler(
-        CommandHandler('relatoriofrente1', relatorioFREN1)
-
-    )
-    dp.add_handler(
-        CommandHandler('relatoriofrente2', relatorioFREN2)
-
-    )
-    dp.add_handler(
-        CommandHandler('relatoriofrente3', relatorioFREN3)
-
-    )
-    dp.add_handler(
-        CommandHandler('relatoriofrente5', relatorioFREN5)
-
-    )
-    dp.add_handler(
-        CommandHandler('graficofrentes', graficoEntrFren)
-
-    )
-    dp.add_handler(
-        CommandHandler('graficotcsetedias', graficoLast7Days)
-
-    )
-    dp.add_handler(
-        CommandHandler('relatorioostipo', relatorioOSTipo)
-
-    )
-
-    dp.add_handler(
-        CommandHandler('disponibilidade', getDisponibilidade)
-
-    )
-
-    dp.add_handler(
-        CommandHandler('consultasaldoped', consultaSaldo)
-
-    )
-
-
-    updater.start_polling()
-    updater.idle()
-
-if __name__ == '__main__':
-    main()
- 
-
-
-
