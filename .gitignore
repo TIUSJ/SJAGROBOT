@@ -1,6 +1,4 @@
 build/
 dist/
-graficos/
-venv/
 .DS_Store
 .idea
