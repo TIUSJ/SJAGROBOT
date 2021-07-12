@@ -138,6 +138,7 @@ def relatorioEntradaDiaAnterior(bot, update):
             bot.send_message(chat_id=chat_id,
                              text='Olá ! Desculpe mas você não tem permisao para acessar o bot :( Favor entrar em contato com o TI para o acesso')
 
+#3
 def relatorioGeralDiaAnterior(bot, update):
     chat_id = update.message.chat_id
     yesterday = date.today() - timedelta(days=1)
