@@ -22,3 +22,5 @@ class Connect:
         print
         "Conexão finalizada!";
         del self;
+
+

@@ -1,5 +1,6 @@
 import cx_Oracle
 import pandas as pd
+from entities.Connection import Connect
 import matplotlib.pyplot as plt
 from datetime import datetime, date, timedelta
 import matplotlib.pyplot as plt
@@ -7,13 +8,8 @@ import matplotlib
 import numpy as np
 
 
-def connection():
-    dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-    conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-    c = conn.cursor()
-    return c
+c = Connect();
 
-c = connection()
 
 def getRel(data):
 
