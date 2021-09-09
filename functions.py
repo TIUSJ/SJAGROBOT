@@ -6,7 +6,20 @@ import matplotlib.pyplot as plt
 permisions =[215323461,818780128,-368194966,705268518,1008267781,746014353,-490653384,-499451163,1020918383,1334109159,1166641089]
 permisionsCOI =[215323461,818780128,-368194966,705268518,-302990246,1008267781,746014353,-490653384, -499451163,1020918383, 1020918383, 1334109159,1166641089]
 
+#teste
 def relatorioEntradaDia(bot, update):
+    chat_id = update.message.chat_id
+    print(chat_id)
+    print("Alisson")
+    #now = datetime.now()
+
+    msg = 'Relatório de entrada toneladas ... Em manutenção!'
+
+    bot.send_message(chat_id=chat_id, text=msg)
+
+
+
+def r1elatorioEntradaDia(bot, update):
     chat_id = update.message.chat_id
     print(chat_id)
     now = datetime.now()
@@ -15,6 +28,7 @@ def relatorioEntradaDia(bot, update):
     dt_string = dt_string.split(" ")
     hoje = dt_string[0]
     print(hoje)
+    #print("ALISSON C")
     total = 0
     if chat_id in permisionsCOI:
 
@@ -24,7 +38,7 @@ def relatorioEntradaDia(bot, update):
         relatorioDiaATR = getATR(hoje)
 
 
-        print(relatorioDia)
+        #print(relatorioDia)
         for key, value in relatorioDia.items():
             if value == None:
                 value = 0
@@ -67,9 +81,8 @@ def relatorioEntradaDia(bot, update):
             total += value/1000
         msg+= "Total TC : %s ton"%(round(total))
 
-
-        bot.send_message(chat_id=chat_id, text=msg)
-
+        #bot.send_message(chat_id=chat_id, text=msg)
+        bot.send_message(chat_id=chat_id, text="OI")
     else:
         bot.send_message(chat_id=chat_id,
                          text='Olá ! Desculpe mas você não tem permisao para acessar o bot :( Favor entrar em contato com o TI para o acesso')

@@ -24,7 +24,7 @@ def getRel(data):
         else:
             dic[row[0]] = row[1]
 
-    conn.close()
+    c.close()
 
     return (dic)
 
@@ -153,7 +153,7 @@ def getATR(data):
         dic[row[0]] = {"POLCANA": row[1], "POLCALDO": row[2], "AR": row[3], "FIBRA": row[4], "PUREZA": row[5],
                        "BRIX": row[6], "ATR": row[7]}
 
-    conn.close()
+    c.close()
 
     return (dic)
 
@@ -175,7 +175,7 @@ def getTC(data):
     for row in c:
         dic[x] = row[0]
         x = "TC Entregue"
-    conn.close()
+    c.close()
     y = (100 * dic['TC Analisada']) / dic["TC Entregue"]
     dic['Porcentagem de TC analisada'] = "%.2f" % y + "%"
     return (dic)
@@ -195,7 +195,7 @@ def getCargasTotal(data):
     x = "Total de cargas entregues"
     for row in c:
         dic[x] = row[0]
-    conn.close()
+    c.close()
 
     return (dic)
 
