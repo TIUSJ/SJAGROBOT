@@ -162,7 +162,7 @@ def getATR(data):
     for row in c:
         dic[row[0]] = {"POLCANA":row[1],"POLCALDO":row[2],"AR": row[3],"FIBRA":row[4],"PUREZA": row[5],"BRIX": row[6],"ATR":row[7]}
 
-    c.close()
+    #c.close()
 
     return (dic)
 
