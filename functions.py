@@ -5,7 +5,6 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, dispatcher
 
 import TelegramBot
-import oracle
 from oracle import *
 from datetime import datetime, date, timedelta
 import matplotlib.pyplot as plt
@@ -34,7 +33,7 @@ def relatorioEntradaDia(bot, update):
     if chat_id in permisionsCOI:
 
         msg ='Relatório de entrada toneladas por frente\n%s\n================\n'%(hoje)
-        relatorioDia =  oracle.getRel(hoje) #getRel(hoje)
+        relatorioDia =  oracle1.getRel(hoje) #getRel(hoje)
         relatorioDiaTMP = getRelTMP(hoje)
         relatorioDiaATR = getATR(hoje)
 

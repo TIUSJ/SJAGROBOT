@@ -1,17 +1,15 @@
 import cx_Oracle
 import pandas as pd
+from connect import Connect
 import matplotlib.pyplot as plt
 from datetime import datetime,date, timedelta
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 
-def conect():
-
-    dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-    conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-
-    return conn.cursor()
+global c
+cs = Connect()
+c = cs.returnC()
 
 def getRel(data):
 
@@ -147,9 +145,6 @@ def getRelImpur(data):
 
 def getATR(data):
 
-    dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-    conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-    c = conn.cursor()
     querystring = '''select CD_FREN_TRAN as FRENTE,
                             ROUND(AVG(QT_PCC),2) as POLCANA,
                             ROUND(AVG(QT_PEX),2) as POLCALDO,
@@ -167,7 +162,7 @@ def getATR(data):
     for row in c:
         dic[row[0]] = {"POLCANA":row[1],"POLCALDO":row[2],"AR": row[3],"FIBRA":row[4],"PUREZA": row[5],"BRIX": row[6],"ATR":row[7]}
 
-    conn.close()
+    c.close()
 
     return (dic)
 
