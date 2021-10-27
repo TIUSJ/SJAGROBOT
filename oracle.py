@@ -6,14 +6,19 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 
+def conect():
 
+    dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
+    conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
+
+    return conn.cursor()
 
 def getRel(data):
 
 
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  c = conn.cursor()
+  #dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
+  #conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
+  #c = conn.cursor()
   querystring = "select CD_FREN_TRAN, SUM(QT_LIQUIDO) from APT_CARGAS where DT_ENTRADA like '%s' GROUP BY CD_FREN_TRAN ORDER BY CD_FREN_TRAN"%(data)
   c.execute(querystring)
 
@@ -24,7 +29,7 @@ def getRel(data):
     else:
         dic[row[0]] = row[1]
 
-  conn.close()
+  c.close()
 
   return (dic)
 
@@ -141,6 +146,7 @@ def getRelImpur(data):
   return (dic)
 
 def getATR(data):
+
     dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
     conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
     c = conn.cursor()
@@ -384,24 +390,26 @@ def getOSAbertas():
   return (lista)
 
 
-def getSolicitacao():
-    dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-    conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
+def getSolicitacao(data,depto):
+    print("teste1 - oRACLE", (data),(depto));
+    dsn_tns = cx_Oracle.makedsn('sja-hsdb04.grupocavalcanti.intranet', 1521, service_name='RM.GRUPOCAVALCANTI.INTRANET')
+    print("teste2 - oRACLE", dsn_tns);
+    conn = cx_Oracle.connect(user='RM', password='RM', dsn=dsn_tns)
     c = conn.cursor()
-    querystring = "select SUM(QT_LIQUIDO/1000) from  APT_CARGAS where DT_ENTRADA ='14/10/2020' UNION select SUM(QT_LIQUIDO/1000) from APT_CARGAS where DT_ENTRADA ='14/10/2020'  and FG_ANALISE='S'"
-    # querystring = "select SUM(QT_LIQUIDO / 1000) from APT_CARGAS UNION select SUM(QT_LIQUIDO / 1000) from APT_CARGAS where FG_ANALISE = 'S'"
+    print("teste3");
+   # querystring = "SELECT POSTOMETEO.DE_POSTO, CLIMAT.QT_LEITURA FROM CLIMAT JOIN POSTOMETEO ON CLIMAT.CD_POSTO = POSTOMETEO.CD_POSTO WHERE DT_OPERACAO like'%s'" % (data)
+    #querystring = "SELECT M.NUMEROMOV, M.STATUS FROM TMOV M, TITMMOV I WHERE M.CODCOLIGADA = I.CODCOLIGADA AND M.IDMOV = I.IDMOV AND M.CODTMV='1.1.03' AND I.CODDEPARTAMENTO = '842' AND M.STATUS = 'A' AND DATAEMISSAO like'%s'" % (data)
+    querystring = "SELECT M.NUMEROMOV, M.STATUS, I.CODDEPARTAMENTO,P.CODIGOREDUZIDO,P.NOMEFANTASIA,S.SALDOFISICO2 FROM TMOV M JOIN TITMMOV I ON M.CODCOLIGADA = I.CODCOLIGADA AND M.IDMOV = I.IDMOV JOIN TPRODUTO P ON P.CODCOLPRD = I.CODCOLIGADA AND P.IDPRD = I.IDPRD JOIN TPRDLOC S ON S.IDPRD = P.IDPRD WHERE  M.CODTMV='1.1.03' AND M.STATUS = 'A' AND M.DATAEMISSAO <='%s' AND I.CODDEPARTAMENTO = '%s'"  % (data,depto)
+    print(querystring);
     c.execute(querystring)
-
+    print("teste4");
     dic = {}
-    x = "TC Analisada TESTE"
     for row in c:
-        dic[x] = row[0]
-        x = "TC Entregue"
-    conn.close()
-    y = (100 * dic['TC Analisada TESTE']) / dic["TC Entregue"]
-    dic['Porcentagem de TC analisada'] = "%.2f" % y + "%"
-    return (dic)
+        dic[row[0]] = row[1],row[2],row[3],row[4],row[5]
 
+    conn.close()
+
+    return (dic)
 
 
 

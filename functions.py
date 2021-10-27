@@ -1,7 +1,22 @@
-from telegram.ext import Updater, InlineQueryHandler, CommandHandler
+import self as self
+import telegram
+from matplotlib.style import context
+from telegram import InlineQueryResultArticle, InputTextMessageContent
+from telegram.ext import Updater, InlineQueryHandler, CommandHandler, dispatcher
+
+import TelegramBot
+import oracle
 from oracle import *
 from datetime import datetime, date, timedelta
 import matplotlib.pyplot as plt
+import plotnine
+import requests
+import time
+import json
+import pandas
+
+
+
 
 permisions =[215323461,818780128,-368194966,705268518,1008267781,746014353,-490653384,-499451163,1020918383,1334109159,1166641089]
 permisionsCOI =[215323461,818780128,-368194966,705268518,-302990246,1008267781,746014353,-490653384, -499451163,1020918383, 1020918383, 1334109159,1166641089]
@@ -19,7 +34,7 @@ def relatorioEntradaDia(bot, update):
     if chat_id in permisionsCOI:
 
         msg ='Relatório de entrada toneladas por frente\n%s\n================\n'%(hoje)
-        relatorioDia = getRel(hoje)
+        relatorioDia =  oracle.getRel(hoje) #getRel(hoje)
         relatorioDiaTMP = getRelTMP(hoje)
         relatorioDiaATR = getATR(hoje)
 
@@ -140,6 +155,7 @@ def relatorioEntradaDiaAnterior(bot, update):
 
 def relatorioGeralDiaAnterior(bot, update):
     chat_id = update.message.chat_id
+    print(chat_id)
     yesterday = date.today() - timedelta(days=1)
     yesterday = yesterday.strftime('%d/%m/%Y')
     if chat_id in permisionsCOI:
@@ -208,6 +224,7 @@ def relatorioEntradaDensidade(bot, update):
 
 def relatorioGeralDiaAnteriorPress(bot, update):
     chat_id = update.message.chat_id
+    print(chat_id)
     yesterday = date.today() - timedelta(days=1)
     yesterday = yesterday.strftime('%d/%m/%Y')
     if chat_id in permisions:
@@ -505,18 +522,89 @@ def getDisponibilidade(bot, update):
                          text='Olá ! Desculpe mas você não tem permisao para acessar o bot :( Favor entrar em contato com o TI para o acesso')
 
 '''RM'''
+'''
+def Iniciar(self):
+    print(self,'teste1')
+    update_id = None
+    while True:
+        print(update_id,'teste2')
+        atualizacao = self.obter_mensagens(update_id)
+        print(atualizacao, 'teste3')
+        mensagens = atualizacao['result']
+        print(mensagens, 'teste4')
+        if mensagens:
+            for mensagem in mensagens:
+                update_id = mensagem['update_id']
+                print( 'teste4')
+                chat_id = mensagem['message']['from']['id']
+                print('teste4')
+                resposta = self.criar_resposta()
+                print('teste4')
+                self.responder(resposta, chat_id)
+
+def obter_mensagens(self, update_id):
+
+                    link_requisicao = f'{self.url_base}getUpdates?timeout =2'
+                    print('teste1 - obter_mensagens ')
+                    if update_id:
+                        print('teste2 - obter_mensagens ')
+                        link_requisicao = f'{link_requisicao}&offset={update_id + 1}'
+                        resultado = requests.get(link_requisicao)
+                        return json.loads(resultado.content)
+
+def criar_resposta(self):
+
+                    return 'Olá Bem vindo!'
+print( 'teste1 - criar_resposta')
+
+
+def responder(self, resposta, chat_id):
+
+                    link_de_envio = f'{self.url_base}sendMessage?chat_id{chat_id}&text = {resposta}'
+                    print('teste1 - responder')
+                    requests.get(link_de_envio)
+
+'''
+def interacao(bot,update):
+    me = bot.get_me()
+    print(me);
+    # Welcome message
+    # msg = "Olá {0} \n".format(me.first_name)
+    msg = "Digite o Departamento: "
+
+    # Commands menu
+    main_menu_keyboard = [[telegram.KeyboardButton('/support')],
+                         [telegram.KeyboardButton('/settings')]]
+    reply_kb_markup = telegram.ReplyKeyboardMarkup(main_menu_keyboard,
+                                                  resize_keyboard=True,
+                                                 one_time_keyboard=True)
+
+    # Send the message with menu
+    bot.send_message(chat_id=update.message.chat_id,
+                     text=msg,
+                     reply_markup=reply_kb_markup)
+
+
 def consultaSaldo(bot, update):
     chat_id = update.message.chat_id
+
     print(chat_id)
-    if chat_id in permisionsCOI:
-
-        msg = 'Posição das Solicitações\n%s\n================\n'
-        solicitacao = getSolicitacao()
-
-        print(solicitacao)
-        for key, value in solicitacao.items():
-           msg += "%s: %.2i\n================\n" % (key, value)
-
+    interacao(bot, update);
+    # inline_caps(update);
+    # print("Após inline");
+    yesterday = date.today() - timedelta(days=0)
+    yesterday = yesterday.strftime('%d/%m/%Y')
+    depto = 842
+    if chat_id in permisions:
+        # print("teste1");
+        msg = 'Posição dos pedidos de compras\n===EM DESENVOLVIMENTO=== %s\n================\n'  # % (yesterday)
+        # print("teste2");
+        relatorioDia = getSolicitacao(yesterday, depto)
+        # print("teste3");
+        for key, value in relatorioDia.items():
+            print(relatorioDia);
+            msg += 'PEDIDO:%s  STATUS:%s\nDEPTO: %s\nPRODUTO:%s - %s\nSALDO: %s\n================\n' % (
+            key, value[0], value[1], value[2], value[3], value[4])
         bot.send_message(chat_id=chat_id, text=msg)
 
     else:
