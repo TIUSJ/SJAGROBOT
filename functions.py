@@ -518,7 +518,50 @@ def getDisponibilidade(bot, update):
         bot.send_message(chat_id=chat_id,
                          text='Olá ! Desculpe mas você não tem permisao para acessar o bot :( Favor entrar em contato com o TI para o acesso')
 
+'''RM'''
+'''
+def Iniciar(self):
+    print(self,'teste1')
+    update_id = None
+    while True:
+        print(update_id,'teste2')
+        atualizacao = self.obter_mensagens(update_id)
+        print(atualizacao, 'teste3')
+        mensagens = atualizacao['result']
+        print(mensagens, 'teste4')
+        if mensagens:
+            for mensagem in mensagens:
+                update_id = mensagem['update_id']
+                print( 'teste4')
+                chat_id = mensagem['message']['from']['id']
+                print('teste4')
+                resposta = self.criar_resposta()
+                print('teste4')
+                self.responder(resposta, chat_id)
 
+def obter_mensagens(self, update_id):
+
+                    link_requisicao = f'{self.url_base}getUpdates?timeout =2'
+                    print('teste1 - obter_mensagens ')
+                    if update_id:
+                        print('teste2 - obter_mensagens ')
+                        link_requisicao = f'{link_requisicao}&offset={update_id + 1}'
+                        resultado = requests.get(link_requisicao)
+                        return json.loads(resultado.content)
+
+def criar_resposta(self):
+
+                    return 'Olá Bem vindo!'
+print( 'teste1 - criar_resposta')
+
+
+def responder(self, resposta, chat_id):
+
+                    link_de_envio = f'{self.url_base}sendMessage?chat_id{chat_id}&text = {resposta}'
+                    print('teste1 - responder')
+                    requests.get(link_de_envio)
+
+'''
 def interacao(bot,update):
     me = bot.get_me()
     print(me);
@@ -564,49 +607,3 @@ def consultaSaldo(bot, update):
     else:
         bot.send_message(chat_id=chat_id,
                          text='Olá ! Desculpe mas você não tem permisao para acessar o bot :( Favor entrar em contato com o TI para o acesso')
-
-'''RM'''
-'''
-def Iniciar(self):
-    print(self,'teste1')
-    update_id = None
-    while True:
-        print(update_id,'teste2')
-        atualizacao = self.obter_mensagens(update_id)
-        print(atualizacao, 'teste3')
-        mensagens = atualizacao['result']
-        print(mensagens, 'teste4')
-        if mensagens:
-            for mensagem in mensagens:
-                update_id = mensagem['update_id']
-                print( 'teste4')
-                chat_id = mensagem['message']['from']['id']
-                print('teste4')
-                resposta = self.criar_resposta()
-                print('teste4')
-                self.responder(resposta, chat_id)
-
-def obter_mensagens(self, update_id):
-
-                    link_requisicao = f'{self.url_base}getUpdates?timeout =2'
-                    print('teste1 - obter_mensagens ')
-                    if update_id:
-                        print('teste2 - obter_mensagens ')
-                        link_requisicao = f'{link_requisicao}&offset={update_id + 1}'
-                        resultado = requests.get(link_requisicao)
-                        return json.loads(resultado.content)
-
-def criar_resposta(self):
-
-                    return 'Olá Bem vindo!'
-print( 'teste1 - criar_resposta')
-
-
-def responder(self, resposta, chat_id):
-
-                    link_de_envio = f'{self.url_base}sendMessage?chat_id{chat_id}&text = {resposta}'
-                    print('teste1 - responder')
-                    requests.get(link_de_envio)
-
-'''
-

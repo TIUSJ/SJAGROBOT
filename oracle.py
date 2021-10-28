@@ -1,5 +1,5 @@
 import pandas as pd
-from entities.connect import Connect
+from entities.model.connect import Connect
 
 global c
 cs = Connect()
