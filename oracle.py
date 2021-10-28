@@ -1,22 +1,13 @@
-import cx_Oracle
 import pandas as pd
-from connect import Connect
-import matplotlib.pyplot as plt
-from datetime import datetime,date, timedelta
-import matplotlib.pyplot as plt
-import matplotlib
-import numpy as np
+from entities.connect import Connect
 
 global c
 cs = Connect()
 c = cs.returnC()
 
+
 def getRel(data):
 
-
-  #dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  #conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  #c = conn.cursor()
   querystring = "select CD_FREN_TRAN, SUM(QT_LIQUIDO) from APT_CARGAS where DT_ENTRADA like '%s' GROUP BY CD_FREN_TRAN ORDER BY CD_FREN_TRAN"%(data)
   c.execute(querystring)
 
@@ -27,16 +18,12 @@ def getRel(data):
     else:
         dic[row[0]] = row[1]
 
-  c.close()
+  #c.close()
 
   return (dic)
 
 def getRelGeral(data):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  c = conn.cursor()
   querystring = x = "select SUM(QT_CANA_ENT),SUM(QT_CARGA_ENT),SUM(QT_CANA_ANL),SUM(VL_PZA),SUM(VL_PCC),SUM(VL_AGIO),SUM(VL_ATR) from PIMSCS.HISTUPNV1 where DT_REF like '%s' GROUP BY DT_REF"%(data)
   c.execute(querystring)
   dic ={}
@@ -53,16 +40,12 @@ def getRelGeral(data):
     dic['Porcentagem de cana analisada'] = "%.2f" % a + "%"
 
 
-  conn.close()
+  #c.close()
 
   return (dic)
 
 def getRelDensidade(data):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  c = conn.cursor()
   querystring = "select CD_FREN_TRAN, AVG(QT_LIQUIDO) from APT_CARGAS where DT_ENTRADA like '%s' GROUP BY CD_FREN_TRAN ORDER BY CD_FREN_TRAN"%(data)
   c.execute(querystring)
 
@@ -71,60 +54,42 @@ def getRelDensidade(data):
 
     dic[row[0]]= row[1]
 
-  conn.close()
+  #c.close()
 
 
   return (dic)
 
 def getRelDensidadeTotal(data):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  c = conn.cursor()
   querystring = "select  AVG(QT_LIQUIDO) from APT_CARGAS where DT_ENTRADA like '%s' GROUP BY DT_ENTRADA"%(data)
-
   c.execute(querystring)
 
-
   for row in c:
-
     resultado = row[0]
-
-  conn.close()
-
+  #c.close()
 
   return (resultado)
 
 def getRelTMP(data):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  c = conn.cursor()
   querystring = "select CD_FREN_TRAN,AVG(QT_HRQUEIMDES) from APT_CARGAS where DT_ENTRADA like '%s' and FG_CANA_CRUA = 'N' GROUP BY CD_FREN_TRAN"%(data)
   c.execute(querystring)
-
   dic ={}
+
   for row in c:
 
     dic[row[0]]= row[1]
 
-  conn.close()
-
+  #c.close()
 
   return (dic)
 
 def getRelImpur(data):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  c = conn.cursor()
   querystring = "select CD_FREN_TRAN,AVG(QT_IMPUR_TERRA), AVG(QT_IMPUR_VEG) from APT_CARGAS where DT_ENTRADA like '%s' GROUP BY CD_FREN_TRAN"%(data)
   c.execute(querystring)
-
   dic ={}
+
   for row in c:
 
     if row[1]==None:
@@ -138,7 +103,7 @@ def getRelImpur(data):
 
     dic[row[0]]= {'Mineral': mineral, 'Vegetal': vegetal}
 
-  conn.close()
+  #c.close()
 
 
   return (dic)
@@ -167,27 +132,23 @@ def getATR(data):
     return (dic)
 
 def getTC(data):
-    dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-    conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-    c = conn.cursor()
+
     querystring = "select SUM(QT_LIQUIDO/1000) from  APT_CARGAS where DT_ENTRADA like '%s' UNION select SUM(QT_LIQUIDO/1000) from APT_CARGAS where DT_ENTRADA like '%s'  and FG_ANALISE='S'" % (data,data)
     #querystring = "select SUM(QT_LIQUIDO / 1000) from APT_CARGAS UNION select SUM(QT_LIQUIDO / 1000) from APT_CARGAS where FG_ANALISE = 'S'"
     c.execute(querystring)
-
     dic = {}
+
     x = "TC Analisada"
     for row in c:
         dic[x] = row[0]
         x = "TC Entregue"
-    conn.close()
+    #c.close()
     y = (100*dic['TC Analisada'])/dic["TC Entregue"]
     dic['Porcentagem de TC analisada'] = "%.2f" % y + "%"
     return (dic)
 
 def getCargasTotal(data):
-    dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-    conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-    c = conn.cursor()
+
     querystring = "select count(*) from APT_CARGAS where DT_ENTRADA like '%s'" % (data)
     c.execute(querystring)
 
@@ -195,34 +156,26 @@ def getCargasTotal(data):
     x = "Total de cargas entregues"
     for row in c:
         dic[x] = row[0]
-    conn.close()
+    #c.close()
 
     return (dic)
 
 def getRelPres(data):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  c = conn.cursor()
   querystring = "SELECT POSTOMETEO.DE_POSTO, CLIMAT.QT_LEITURA FROM CLIMAT JOIN POSTOMETEO ON CLIMAT.CD_POSTO = POSTOMETEO.CD_POSTO WHERE DT_OPERACAO like'%s'"%(data)
   c.execute(querystring)
-
   dic ={}
+
   for row in c:
 
     dic[row[0]]= row[1]
 
-  conn.close()
+  #c.close()
 
   return (dic)
 
 def getRelBoletim(data):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb04.grupocavalcanti.intranet', 1521, service_name='RM.GRUPOCAVALCANTI.INTRANET')
-  conn = cx_Oracle.connect(user='PIMS_PI', password='PI', dsn=dsn_tns)
-  c = conn.cursor()
   querystring = '''SELECT VAR_CODIGO,LAN_VALOR FROM PROLANCA WHERE LAN_DATA = '%s' AND VAR_CODIGO = 'CANPROPRIA' AND LAN_HORA = 'XXXX'
               UNION
               SELECT VAR_CODIGO,LAN_VALOR FROM PROLANCA WHERE LAN_DATA = '%s' AND VAR_CODIGO = '0CANFORNEC' AND LAN_HORA = 'XXXX'
@@ -255,40 +208,32 @@ def getRelBoletim(data):
     else:
         dic[dicConvert[row[0]]] = row[1]
 
-  conn.close()
+  #c.close()
 
   return (dic)
 
 def getRelByFren(data, frente):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='PIMSCS', password='USJPIMS1', dsn=dsn_tns)
-  c = conn.cursor()
   querystring ='''select DA_UPNIVEL1, QT, ATR, TMP  from 
                 (select CD_UPNIVEL1, SUM(QT_LIQUIDO/1000) as QT,  ROUND(AVG((QT_PCC*9.36814)+((QT_ARCALDO*(1-(0.01*QT_FIBRA)*QT_FATORC))*8.9)),2)AS ATR, ROUND(AVG(QT_LIQUIDO/1000)) as TMP from APT_CARGAS where DT_ENTRADA like '%s' and CD_FREN_TRAN = %s GROUP BY CD_UPNIVEL1 ORDER BY CD_UPNIVEL1)x
                 inner join 
                 (select CD_UPNIVEL1, DA_UPNIVEL1 from UPNIVEL1)y 
                 on x.CD_UPNIVEL1=y.CD_UPNIVEL1'''%(data, frente)
   c.execute(querystring)
-
   dic ={}
+
   for row in c:
     if row[1] == None:
         dic[row[0]]= 0
     else:
         dic[row[0]] = [row[1], row[2], row[3]]
 
-  conn.close()
+  #c.close()
 
   return (dic)
 
 def getOSRel(data):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='SISMA80', password='SISMA80', dsn=dsn_tns)
-  c = conn.cursor()
   querystring ='''select  descr,ossum,descricao from
                 (select empresa,ossum,descricao from
                 (select codiempr as empresa, codipoma as tipo, count(*) as OSSUM from OSRESUM where DATAENTRA = '%s' group by codiempr,codipoma)x left join
@@ -297,23 +242,19 @@ def getOSRel(data):
                 (select codiempr,descr from empresa)w
                 on z.empresa = w.codiempr'''%(data)
   c.execute(querystring)
-
   dic ={}
+
   for row in c:
 
     dic[row[0]]= [row[2],row[1]]
 
-  conn.close()
+  #c.close()
 
   return (dic)
 
 
 def getClasses(equipamento):
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='SISMA80', password='SISMA80', dsn=dsn_tns)
-  c = conn.cursor()
   querystring ='''SELECT X.CODIEMPR,X.NUMEEQUI,X.CODIRELAC3,DESCRELAC3.DESCRICAO FROM
                 (SELECT CODIEMPR,NUMEEQUI,CODIRELAC3 FROM(
                 SELECT EQPTORELAC3.CODIEMPR, EQPTORELAC3.NUMEEQUI,EQPTORELAC3.DATA, EQPTORELAC3.HORA,EQPTORELAC3.CODIRELAC3 
@@ -328,12 +269,11 @@ def getClasses(equipamento):
                 ON DESCRELAC3.CODIRELAC3 = X.CODIRELAC3'''%(equipamento)
   c.execute(querystring)
 
-
-
-
   dic = {}
+
   var = 'CODC2'
   var1 = 'DESC2'
+
   for row in c:
 
     dic['EQUIPAMENTO']= row[1]
@@ -343,19 +283,12 @@ def getClasses(equipamento):
 
 
 
-  conn.close()
-
-
-
+  #c.close()
 
   return (dic)
 
 def getEquipamentos():
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='SISMA80', password='SISMA80', dsn=dsn_tns)
-  c = conn.cursor()
   querystring ='''SELECT NUMEEQUI FROM EQUIPAMENTO WHERE CODIINES = 0 AND CODIEMPR = 6'''
   c.execute(querystring)
   lista = []
@@ -365,32 +298,26 @@ def getEquipamentos():
     dic = getClasses(str(row[0]))
     if dic != {}:
         lista.append(dic)
-  conn.close()
+  #c.close()
+
   dataframe = pd.DataFrame(lista)
   return (dataframe)
 
 def getOSAbertas():
 
-
-  dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-  conn = cx_Oracle.connect(user='SISMA80', password='SISMA80', dsn=dsn_tns)
-  c = conn.cursor()
   querystring ="SELECT NUMEEQUI FROM OSRESUM WHERE DATASAIDA IS NULL AND MBFILLER01 = 'CON' AND CODIEMPR = 6 UNION SELECT NUMEEQUI FROM OSRESUM WHERE DATASAIDA IS NULL AND MBFILLER01 = '' AND CODIEMPR = 6"
   c.execute(querystring)
   lista = []
 
   for row in c:
     lista.append(row[0])
-  conn.close()
+  #c.close()
   return (lista)
 
 
 def getSolicitacao(data,depto):
     print("teste1 - oRACLE", (data),(depto));
-    dsn_tns = cx_Oracle.makedsn('sja-hsdb04.grupocavalcanti.intranet', 1521, service_name='RM.GRUPOCAVALCANTI.INTRANET')
-    print("teste2 - oRACLE", dsn_tns);
-    conn = cx_Oracle.connect(user='RM', password='RM', dsn=dsn_tns)
-    c = conn.cursor()
+    print("teste2 - oRACLE", Connect.self.dsn_tns);
     print("teste3");
    # querystring = "SELECT POSTOMETEO.DE_POSTO, CLIMAT.QT_LEITURA FROM CLIMAT JOIN POSTOMETEO ON CLIMAT.CD_POSTO = POSTOMETEO.CD_POSTO WHERE DT_OPERACAO like'%s'" % (data)
     #querystring = "SELECT M.NUMEROMOV, M.STATUS FROM TMOV M, TITMMOV I WHERE M.CODCOLIGADA = I.CODCOLIGADA AND M.IDMOV = I.IDMOV AND M.CODTMV='1.1.03' AND I.CODDEPARTAMENTO = '842' AND M.STATUS = 'A' AND DATAEMISSAO like'%s'" % (data)
@@ -399,10 +326,11 @@ def getSolicitacao(data,depto):
     c.execute(querystring)
     print("teste4");
     dic = {}
+
     for row in c:
         dic[row[0]] = row[1],row[2],row[3],row[4],row[5]
 
-    conn.close()
+    #c.close()
 
     return (dic)
 
