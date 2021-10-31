@@ -21,7 +21,7 @@ def relatorioEntradaDia(bot, update):
     if chat_id in permisionsCOI:
 
         msg ='Relatório de entrada toneladas por frente\n%s\n================\n'%(hoje)
-        relatorioDia =  oracle1.getRel(hoje) #getRel(hoje)
+        relatorioDia =  getRel(hoje) #getRel(hoje)
         relatorioDiaTMP = getRelTMP(hoje)
         relatorioDiaATR = getATR(hoje)
 
