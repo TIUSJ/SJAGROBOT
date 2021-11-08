@@ -252,7 +252,6 @@ def getOSRel(data):
 
   return (dic)
 
-
 def getClasses(equipamento):
 
   querystring ='''SELECT X.CODIEMPR,X.NUMEEQUI,X.CODIRELAC3,DESCRELAC3.DESCRICAO FROM
@@ -315,24 +314,28 @@ def getOSAbertas():
   return (lista)
 
 
-def getSolicitacao(data,depto):
-    print("teste1 - oRACLE", (data),(depto));
-    print("teste2 - oRACLE", Connect.self.dsn_tns);
-    print("teste3");
-   # querystring = "SELECT POSTOMETEO.DE_POSTO, CLIMAT.QT_LEITURA FROM CLIMAT JOIN POSTOMETEO ON CLIMAT.CD_POSTO = POSTOMETEO.CD_POSTO WHERE DT_OPERACAO like'%s'" % (data)
-    #querystring = "SELECT M.NUMEROMOV, M.STATUS FROM TMOV M, TITMMOV I WHERE M.CODCOLIGADA = I.CODCOLIGADA AND M.IDMOV = I.IDMOV AND M.CODTMV='1.1.03' AND I.CODDEPARTAMENTO = '842' AND M.STATUS = 'A' AND DATAEMISSAO like'%s'" % (data)
-    querystring = "SELECT M.NUMEROMOV, M.STATUS, I.CODDEPARTAMENTO,P.CODIGOREDUZIDO,P.NOMEFANTASIA,S.SALDOFISICO2 FROM TMOV M JOIN TITMMOV I ON M.CODCOLIGADA = I.CODCOLIGADA AND M.IDMOV = I.IDMOV JOIN TPRODUTO P ON P.CODCOLPRD = I.CODCOLIGADA AND P.IDPRD = I.IDPRD JOIN TPRDLOC S ON S.IDPRD = P.IDPRD WHERE  M.CODTMV='1.1.03' AND M.STATUS = 'A' AND M.DATAEMISSAO <='%s' AND I.CODDEPARTAMENTO = '%s'"  % (data,depto)
-    print(querystring);
+def getSolicitacao(data, depto):
+    print("teste1 - oRACLE", (data),(depto))
+    print("teste2 - oRACLE")
+    print("teste3")
+    querystring = "SELECT M.NUMEROMOV, M.STATUS, I.CODDEPARTAMENTO,P.CODIGOREDUZIDO,P.NOMEFANTASIA,S.SALDOFISICO2 " \
+                  "FROM TMOV M JOIN TITMMOV I ON M.CODCOLIGADA = I.CODCOLIGADA AND M.IDMOV = I.IDMOV JOIN TPRODUTO P ON P.CODCOLPRD = I.CODCOLIGADA AND P.IDPRD = I.IDPRD JOIN TPRDLOC S ON S.IDPRD = P.IDPRD WHERE " \
+                  "M.CODTMV='1.1.03' AND M.STATUS = 'A' AND M.DATAEMISSAO <='%s' AND I.CODDEPARTAMENTO = '%s'"%(data,depto)
+
+    print(querystring)
+    print("teste 3 metros e meio")
     c.execute(querystring)
-    print("teste4");
+
+    print("teste4")
     dic = {}
 
     for row in c:
         dic[row[0]] = row[1],row[2],row[3],row[4],row[5]
 
-    #c.close()
+    c.close()
 
     return (dic)
+
 
 
 
