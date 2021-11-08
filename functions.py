@@ -1,11 +1,15 @@
 import telegram
+from entities.model.permissions import *
 
 from entities.DAO.oracle import *
 from datetime import datetime, date, timedelta
 import matplotlib.pyplot as plt
 
-permisions =[215323461,818780128,-368194966,705268518,1008267781,746014353,-490653384,-499451163,1020918383,1334109159,1166641089]
-permisionsCOI =[215323461,818780128,-368194966,705268518,-302990246,1008267781,746014353,-490653384, -499451163,1020918383, 1020918383, 1334109159,1166641089]
+#permisions =[215323461,818780128,-368194966,705268518,1008267781,746014353,-490653384,-499451163,1020918383,1334109159,1166641089]
+#permisionsCOI =[215323461,818780128,-368194966,705268518,-302990246,1008267781,746014353,-490653384, -499451163,1020918383, 1020918383, 1334109159]
+
+global p
+p = Permission()
 
 
 def relatorioEntradaDia(bot, update):
@@ -18,7 +22,8 @@ def relatorioEntradaDia(bot, update):
     hoje = dt_string[0]
     print(hoje)
     total = 0
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('d'):
 
         msg ='Relatório de entrada toneladas por frente\n%s\n================\n'%(hoje)
         relatorioDia =  getRel(hoje) #getRel(hoje)
@@ -86,7 +91,8 @@ def relatorioEntradaDiaAnterior(bot, update):
         ontem = ontem.strftime('%d/%m/%Y')
         print(ontem)
         total = 0
-        if chat_id in permisionsCOI:
+
+        if chat_id in p.getPermission('c'):
 
             msg = 'Relatório de entrada toneladas por frente\n%s\n================\n' % (ontem)
             relatorioDia = getRel(ontem)
@@ -145,7 +151,8 @@ def relatorioGeralDiaAnterior(bot, update):
     print(chat_id)
     yesterday = date.today() - timedelta(days=1)
     yesterday = yesterday.strftime('%d/%m/%Y')
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('c'):
         msg = 'Relatório de entrada geral\n%s\n================\n' % (yesterday)
         relatorioDia = getTC(yesterday)
         relatorioDiaATR = getATR(yesterday)
@@ -182,7 +189,8 @@ def relatorioEntradaDensidade(bot, update):
     hoje = dt_string[0]
     print(hoje)
     total = 0
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('c'):
 
         msg ='Relatório densidade de carga por frente\n%s\n================\n'%(hoje)
         relatorioDia = getRelDensidade(hoje)
@@ -214,7 +222,8 @@ def relatorioGeralDiaAnteriorPress(bot, update):
     print(chat_id)
     yesterday = date.today() - timedelta(days=1)
     yesterday = yesterday.strftime('%d/%m/%Y')
-    if chat_id in permisions:
+
+    if chat_id in p.getPermission('d'):
         msg = 'Relatório de Precipitação pluviometrica\n%s\n================\n' % (yesterday)
         relatorioDia = getRelPres(yesterday)
         for key, value in relatorioDia.items():
@@ -234,7 +243,8 @@ def relatorioBoletim(bot, update):
     yesterday = yesterday.strftime('%d/%m/%Y')
     print(yesterday)
     total = 0
-    if chat_id in permisions:
+
+    if chat_id in p.getPermission('d'):
 
         msg ='Boletim de Produção\n%s\n================\n'%(yesterday)
         relatorioBoletim = getRelBoletim(yesterday)
@@ -259,7 +269,8 @@ def relatorioFREN1(bot, update):
     dt_string = dt_string.split(" ")
     hoje = dt_string[0]
     total = 0
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('c'):
 
         msg ='Relatório de entrada de cana por Fazenda\n%s\nFrente 1\n================\n'%(hoje)
         relatorioBoletim = getRelByFren(hoje,1)
@@ -284,7 +295,7 @@ def relatorioFREN2(bot, update):
     dt_string = dt_string.split(" ")
     hoje = dt_string[0]
     total = 0
-    if chat_id in permisionsCOI:
+    if chat_id in p.getPermission('c'):
 
         msg ='Relatório de entrada de cana por Fazenda\n%s\nFrente 2\n================\n'%(hoje)
         relatorioBoletim = getRelByFren(hoje,2)
@@ -309,7 +320,8 @@ def relatorioFREN3(bot, update):
     dt_string = dt_string.split(" ")
     hoje = dt_string[0]
     total = 0
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('c'):
 
         msg ='Relatório de entrada de cana por Fazenda\n%s\nFrente 3\n================\n'%(hoje)
         relatorioBoletim = getRelByFren(hoje,3)
@@ -334,7 +346,8 @@ def relatorioFREN5(bot, update):
     dt_string = dt_string.split(" ")
     hoje = dt_string[0]
     total = 0
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('c'):
 
         msg ='Relatório de entrada de cana por Fazenda\n%s\nFrente 5\n================\n'%(hoje)
         relatorioBoletim = getRelByFren(hoje,5)
@@ -360,7 +373,8 @@ def graficoEntrFren(bot, update):
     hoje = dt_string[0]
     print(hoje)
     total = 0
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('c'):
 
         #msg = 'Relatório de entrada toneladas por frente\n%s\n================\n' % (hoje)
         relatorioDia = getRel(hoje)
@@ -401,7 +415,8 @@ def graficoLast7Days(bot, update):
     hoje = dt_string[0]
     print(hoje)
     total = 0
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('c'):
         def getLast7Days():
             daysList = []
             prodList = []
@@ -462,7 +477,8 @@ def relatorioOSTipo(bot, update):
     dt_string = dt_string.split(" ")
     hoje = dt_string[0]
     total = 0
-    if chat_id in permisionsCOI:
+
+    if chat_id in p.getPermission('c'):
 
         msg ='Relatório Ordens de Serviços por Dia [SISMA]\n%s\n================\n'%(hoje)
         relatorioBoletim = getOSRel(hoje)
@@ -484,7 +500,7 @@ def getDisponibilidade(bot, update):
 
     print(chat_id)
 
-    if chat_id in permisionsCOI:
+    if chat_id in p.getPermission('c'):
 
         msg = 'Processando...\nEm alguns instantes o gráfico de disponibilidade será enviado...'
 
@@ -552,6 +568,7 @@ def responder(self, resposta, chat_id):
                     requests.get(link_de_envio)
 
 '''
+
 def interacao(bot,update):
     me = bot.get_me()
     print(me);
@@ -570,6 +587,7 @@ def interacao(bot,update):
     bot.send_message(chat_id=update.message.chat_id,
                      text=msg,
                      reply_markup=reply_kb_markup)
+
 
 
 def consultaSaldo(bot, update):
@@ -597,3 +615,24 @@ def consultaSaldo(bot, update):
     else:
         bot.send_message(chat_id=chat_id,
                          text='Olá ! Desculpe mas você não tem permisao para acessar o bot :( Favor entrar em contato com o TI para o acesso')
+
+'''
+
+#TESTE ALISSON
+
+def consultaSaldo1(bot,update):
+    chat_id = update.message.chat_id
+    msg =   """
+                Escolha uma opção para continuar (Clique no item):
+                
+                     /opcao1 Fazer um pedido
+                     /opcao2 Reclamar de um pedido
+                     
+                Responder qualquer outra coisa não vai funcionar, clique em uma das opções
+            """
+
+    bot.send_message(chat_id=chat_id, text=msg)
+
+    #bot.reply_to(chat_id=chat_id, text="OK")
+
+'''

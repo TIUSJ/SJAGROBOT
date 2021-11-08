@@ -1,4 +1,13 @@
+'''
+Classe:     Connect
+Objetivo:   Iniciar e prover a conexão ao BD Oracle
+Autor:      Alisson Cavalcanti Galvão
+Data:       01/11/2021
+'''
+
+
 import cx_Oracle
+
 
 class Connect():
 

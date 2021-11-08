@@ -92,6 +92,9 @@ def main():
       CommandHandler('consultasaldoped', functions.consultaSaldo)
     )
 
+    #16
+    #dp.add_handler(CommandHandler('IT', functions.it))
+
 
 
     updater.start_polling()
