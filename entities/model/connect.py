@@ -6,14 +6,22 @@ Data:       01/11/2021
 '''
 
 
+from decouple import config
 import cx_Oracle
 
+HOST = config('HOST')
+PORT=config('PORT')
+SN=config('SN')
+USER=config('USER')
+PASS=config('PASS')
+
+#print(SN)
 
 class Connect():
 
     def __init__(self):
-        self.dsn_tns = cx_Oracle.makedsn('sja-hsdb03.grupocavalcanti.intranet', 1521, service_name='controle.usj.com.br')
-        self.conn = cx_Oracle.connect(user='PIMSCS1', password='PIMSCS1', dsn=self.dsn_tns)
+        self.dsn_tns = cx_Oracle.makedsn(HOST, PORT, service_name=SN)
+        self.conn = cx_Oracle.connect(user=USER, password=PASS, dsn=self.dsn_tns)
         self.c = self.conn.cursor()
 
 

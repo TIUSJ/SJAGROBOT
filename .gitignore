@@ -2,3 +2,5 @@ build/
 dist/
 .DS_Store
 .idea
+.env
+entities/model/connect.py
